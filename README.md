@@ -9,6 +9,7 @@ Next.js 16 site for Butler Signs (Suitland, MD).
 - `/we-deliver` — Work gallery
 - `/book` — Booking form
 - `/butler-signs` — Redirects home
+- `/admin` — Content editor (see [docs/CMS.md](docs/CMS.md))
 
 ## Develop
 

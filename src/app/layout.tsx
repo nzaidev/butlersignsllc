@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import { Anton, Bodoni_Moda, Caveat, DM_Sans, JetBrains_Mono, Playfair_Display } from "next/font/google";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-import { SiteAssistantLoader } from "@/components/SiteAssistantLoader";
-import { SiteEffects } from "@/components/SiteEffects";
 import { asset } from "@/data/images";
 import "./globals.css";
 
@@ -63,13 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${anton.variable} ${caveat.variable} ${dmSans.variable} ${jetbrains.variable} ${playfair.variable} ${bodoni.variable}`}
     >
-      <body>
-        <Header />
-        {children}
-        <Footer />
-        <SiteAssistantLoader />
-        <SiteEffects />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

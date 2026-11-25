@@ -1,6 +1,6 @@
 "use client";
 
-import { GALLERY, type GalleryCategory } from "@/data/gallery";
+import type { GalleryCategory, GalleryItem } from "@/cms/schema";
 import { useEffect, useMemo, useState } from "react";
 
 const FILTERS: { id: "all" | GalleryCategory; label: string }[] = [
@@ -16,18 +16,18 @@ const CATEGORY_LABEL: Record<GalleryCategory, string> = {
   graphics: "Graphic",
 };
 
-export function Gallery() {
+export function Gallery({ items }: { items: GalleryItem[] }) {
   const [filter, setFilter] = useState<"all" | GalleryCategory>("all");
   const [active, setActive] = useState<number | null>(null);
 
   const counts = useMemo(() => {
     return {
-      all: GALLERY.length,
-      storefront: GALLERY.filter((i) => i.category === "storefront").length,
-      vehicle: GALLERY.filter((i) => i.category === "vehicle").length,
-      graphics: GALLERY.filter((i) => i.category === "graphics").length,
+      all: items.length,
+      storefront: items.filter((i) => i.category === "storefront").length,
+      vehicle: items.filter((i) => i.category === "vehicle").length,
+      graphics: items.filter((i) => i.category === "graphics").length,
     };
-  }, []);
+  }, [items]);
 
   useEffect(() => {
     document.body.style.overflow = active === null ? "" : "hidden";
@@ -38,10 +38,10 @@ export function Gallery() {
 
   const visible = useMemo(
     () =>
-      GALLERY.map((item, index) => ({ item, index })).filter(
-        ({ item }) => filter === "all" || item.category === filter,
-      ),
-    [filter],
+      items
+        .map((item, index) => ({ item, index }))
+        .filter(({ item }) => filter === "all" || item.category === filter),
+    [filter, items],
   );
 
   const openIndex =
@@ -73,15 +73,15 @@ export function Gallery() {
           <div className="gallery-grid">
             {visible.map(({ item, index }) => (
               <button
-                key={item.file + index}
+                key={item.image.src + index}
                 type="button"
-                className={`gallery-item${item.span2 ? " span-2" : ""}`}
+                className={`gallery-item${item.wide ? " span-2" : ""}`}
                 onClick={() => setActive(index)}
               >
-                <img src={item.src} alt={item.alt} loading="lazy" />
+                <img src={item.image.src} alt={item.image.alt} loading="lazy" />
                 <div className="meta">
                   <span className="badge cat">{CATEGORY_LABEL[item.category]}</span>
-                  <span className="badge">{item.alt}</span>
+                  {item.image.alt ? <span className="badge">{item.image.alt}</span> : null}
                 </div>
               </button>
             ))}
@@ -130,8 +130,8 @@ export function Gallery() {
         </button>
         {current ? (
           <>
-            <img className="lightbox-img" src={current.item.src} alt={current.item.alt} />
-            <span className="lightbox-caption">{current.item.alt}</span>
+            <img className="lightbox-img" src={current.item.image.src} alt={current.item.image.alt} />
+            <span className="lightbox-caption">{current.item.image.alt}</span>
           </>
         ) : null}
       </div>

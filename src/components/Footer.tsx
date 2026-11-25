@@ -1,26 +1,21 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Rich } from "@/cms/rich";
+import type { SiteContent } from "@/cms/schema";
 import { CONTACT } from "@/data/contact";
 
-export function Footer({
-  headline = (
-    <>
-      Make your business <em>impossible</em> to miss.
-    </>
-  ),
-}: {
-  headline?: ReactNode;
-}) {
+export function Footer({ content }: { content: SiteContent["site"]["footer"] }) {
   return (
     <footer className="site-footer">
       <div className="container">
         <div className="footer-grid">
-          <h2 className="footer-headline">{headline}</h2>
+          <h2 className="footer-headline">
+            <Rich text={content.headline} />
+          </h2>
           <div className="footer-meta">
             <div className="footer-col">
               <span className="label">Visit</span>
-              <p>Suitland, Maryland</p>
-              <p>Mon–Fri · 8a–5p</p>
+              <p>{CONTACT.location}</p>
+              {content.hours ? <p>{content.hours}</p> : null}
             </div>
             <div className="footer-col">
               <span className="label">Contact</span>
@@ -38,8 +33,8 @@ export function Footer({
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 Butler Signs · Est. 1943</span>
-          <span>Crafted in Suitland, MD</span>
+          <span>{content.copyright}</span>
+          <span>{content.credit}</span>
         </div>
       </div>
     </footer>
